@@ -7,14 +7,26 @@ module.exports = class Queue extends Command {
     }
 
     static action(message) {
+        if (!this.list) {
+            return "Ma queue est vidée...";
+        }
         return "Voici la queue :\n\n" + this.printList();
     }
 
     static addList(list) {
-        this.list = [];
+        if (!this.list) this.list = [];
         for(let i = 0; i < list.length; i++) {
             this.list.push("https://www.youtube.com/watch?v=" + list[i]);
         }
+    }
+
+    static add(music) {
+        if (!this.list) this.list = [];
+        this.list.push(music);
+    }
+
+    static clear() {
+        this.list = [];
     }
 
     static getList() {

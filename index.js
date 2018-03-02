@@ -29,8 +29,10 @@ bot.on('message', async function (message) {
     }
 
     if (mots[0] === '!dit') {
-        mots.shift();
-        message.channel.send(mots.join(' '));
+        if (mots.length > 1) {
+            mots.shift();
+            message.channel.send(mots.join(' '));
+        }
     }
 
     if (mots[0] === '!presentation') {
@@ -60,6 +62,8 @@ bot.on('message', async function (message) {
                 else sub = queueList.substring(2000*i, queueList.length);
                 message.channel.send(sub);
             }
+        } else {
+            message.channel.send(queueList);
         }
     } else if (PlayQueue.match(message)) {
         PlayQueue.action(message, Queue);
