@@ -109,7 +109,60 @@ module.exports = function() {
         return x;
     }
 
+    /**
+     * Finds number of videos & videos
+     * information in the playlist
+     *
+     * @param {any} id
+     * @param {any} [pageToken=null]
+     * @returns onject containing playlist information
+     */
+    async function parseVideo(id, pageToken = null) {
+        let result; //contains list of all vidos in playlist
+
+        let apiUrl = 'https://www.googleapis.com/youtube/v3/videos';
+        let params = {
+            'id': id,
+            'pageToken': (pageToken == null) ? '' : pageToken,
+            'part': 'snippet,contentDetails',
+            'key': YOUR_API_KEY,
+
+        };
+
+        let queryString = buildQueryString(apiUrl, params);
+        console.log(queryString);
+
+        let numOfReq = 1;
+
+        let x = await new Promise((resolve, reject) => {
+            getRequest(queryString).then((res) => {
+                if (numOfReq > 1) {
+
+                    for (let myKey in res.items) {
+                        if (res.items.hasOwnProperty(myKey)) {
+                            result.items.push(res.items[myKey]);
+                        }
+                    }
+                    numOfReq = numOfReq + 1;
+
+                } else {
+                    result = res;
+                    resolve(result);
+                }
+                //till all videos are retrived
+                if (res.hasOwnProperty('nextPageToken')) {
+                    parsePlaylist(id, res.nextPageToken);
+                }
+            }).catch((err) => {
+                console.log(err);
+                reject(err);
+            });
+        });
+        return x;
+    }
+
     return {
         parsePlaylist: parsePlaylist,
+        parseVideo: parseVideo,
     }
 };

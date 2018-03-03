@@ -1,12 +1,13 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
+const fs = require('fs');
+
 const Google = require('./commandes/google');
 const Play = require('./commandes/play');
-const Playlist = require('./commandes/playlist');
 const Queue = require('./commandes/queue');
-const PlayQueue = require('./commandes/playQueue');
 const Help = require('./commandes/help');
-const fs = require('fs');
+const Add = require('./commandes/add');
+
 
 bot.on('ready', function () {
     bot.user.setActivity('cirer les chaussures de mon Maitre Jules').catch(console.error);
@@ -39,22 +40,15 @@ bot.on('message', async function (message) {
         message.channel.send("Bonjour, je suis l'esclave de votre seigneur et maître Jules. Je serais votre humble serviteur afin de remplir le moindre de vos désirs.");
     }
 
-    let CommandeUsed = Google.parse(message) || Play.parse(message) || Help.parse(message);
+    let CommandeUsed = Google.parse(message) || Help.parse(message);
 
-    if (Playlist.match(message)) {
-        let musics = await Playlist.action(message).catch(console.error);
-        let listMusics = [];
-        for (let i = 0; i < musics.length; i++) {
-            listMusics.push(musics[i].contentDetails.videoId);
-        }
-        Queue.addList(listMusics);
-        console.log(Queue.printList());
-        console.log(listMusics.length);
-        console.log(listMusics[0]);
+    if (Play.match(message)) {
+        Play.action(message, Queue);
+    }
 
-    } else if (Queue.match(message)) {
-        let queueList = Queue.action(message);
-        if (queueList.length > 2000) {
+    if (Queue.match(message)) {
+        /*let queueList = */Queue.action(message);
+        /*if (queueList.length > 2000) {
             let length = Math.floor(queueList.length/2000);
             for(let i = 0; i <= length; i++) {
                 let sub;
@@ -64,10 +58,12 @@ bot.on('message', async function (message) {
             }
         } else {
             message.channel.send(queueList);
-        }
-    } else if (PlayQueue.match(message)) {
-        PlayQueue.action(message, Queue);
+        }*/
+    } else if (Add.match(message)) {
+        let musics = await Add.action(message).catch(console.error);
+        Queue.add(musics);
     }
+
     if (mots[0] === '!pause' && mots.length === 1) {
         Play.pause();
     }
@@ -80,6 +76,7 @@ bot.on('message', async function (message) {
     if (mots[0] === '!leave' && mots.length === 1) {
         Play.leave();
     }
+
     if (mots[0] === '!parle' && mots.length === 1) {
         fs.readFile('test.txt', 'utf8', function(err, contents) {
             console.log(contents);
