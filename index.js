@@ -47,21 +47,10 @@ bot.on('message', async function (message) {
     }
 
     if (Queue.match(message)) {
-        /*let queueList = */Queue.action(message);
-        /*if (queueList.length > 2000) {
-            let length = Math.floor(queueList.length/2000);
-            for(let i = 0; i <= length; i++) {
-                let sub;
-                if (i !== length) sub = queueList.substring(2000*i,2000*(i+1));
-                else sub = queueList.substring(2000*i, queueList.length);
-                message.channel.send(sub);
-            }
-        } else {
-            message.channel.send(queueList);
-        }*/
+        Queue.action(message);
     } else if (Add.match(message)) {
         let musics = await Add.action(message).catch(console.error);
-        Queue.add(musics);
+        Queue.add(message, musics);
     }
 
     if (mots[0] === '!pause' && mots.length === 1) {

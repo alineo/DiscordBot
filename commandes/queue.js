@@ -39,7 +39,12 @@ module.exports = class Queue extends Command {
         message.channel.send({embed});
     }
 
-    static add(music) {
+    static add(message, music) {
+        if (music === undefined) {
+            message.channel.send("Impossible d'ajouter la playlist à la queue.");
+            return;
+        }
+
         if (!this.list)
             this.list = [];
 
