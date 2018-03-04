@@ -161,8 +161,63 @@ module.exports = function() {
         return x;
     }
 
+    /**
+     * Finds number of videos & videos
+     * information in the playlist
+     *
+     * @param {any} id
+     * @param {any} [pageToken=null]
+     * @returns onject containing playlist information
+     */
+    async function searchVideo(id, pageToken = null) {
+        let result; //contains list of all vidos in playlist
+
+        let apiUrl = 'https://www.googleapis.com/youtube/v3/search';
+        let params = {
+            'maxResults': '5',
+            //'pageToken': (pageToken == null) ? '' : pageToken,
+            'q': id,
+            'part': 'snippet',
+            'type': 'video',
+            'key': YOUR_API_KEY,
+
+        };
+
+        let queryString = buildQueryString(apiUrl, params);
+        console.log(queryString);
+
+        let numOfReq = 1;
+
+        let x = await new Promise((resolve, reject) => {
+            getRequest(queryString).then((res) => {
+                if (numOfReq > 1) {
+
+                    for (let myKey in res.items) {
+                        if (res.items.hasOwnProperty(myKey)) {
+                            result.items.push(res.items[myKey]);
+                        }
+                    }
+                    numOfReq = numOfReq + 1;
+
+                } else {
+                    result = res;
+                    resolve(result);
+                }
+                //till all videos are retrived
+                if (res.hasOwnProperty('nextPageToken')) {
+                    parsePlaylist(id, res.nextPageToken);
+                }
+            }).catch((err) => {
+                console.log(err);
+                reject(err);
+            });
+        });
+        return x;
+    }
+
     return {
         parsePlaylist: parsePlaylist,
         parseVideo: parseVideo,
+        searchVideo: searchVideo,
     }
 };

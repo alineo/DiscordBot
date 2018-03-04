@@ -12,4 +12,4 @@ module.exports = class Google extends Command {
         message.reply('https://www.google.fr/#q=' + args.join('%20'));
     }
 
-}
+};

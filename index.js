@@ -7,6 +7,8 @@ const Play = require('./commandes/play');
 const Queue = require('./commandes/queue');
 const Help = require('./commandes/help');
 const Add = require('./commandes/add');
+const Pathfinder = require('./commandes/pathfinder');
+const SearchYoutube = require('./commandes/searchYoutube');
 
 
 bot.on('ready', function () {
@@ -40,7 +42,7 @@ bot.on('message', async function (message) {
         message.channel.send("Bonjour, je suis l'esclave de votre seigneur et maître Jules. Je serais votre humble serviteur afin de remplir le moindre de vos désirs.");
     }
 
-    let CommandeUsed = Google.parse(message) || Help.parse(message);
+    let CommandeUsed = Google.parse(message) || Help.parse(message) || Pathfinder.parse(message) || SearchYoutube.parse(message);
 
     if (Play.match(message)) {
         Play.action(message, Queue);
@@ -72,7 +74,6 @@ bot.on('message', async function (message) {
         });
         console.log('after calling readFile');
     }
-
 });
 
 bot.login('NDE3MDcwNjg0OTY0MTI2NzIw.DXa_Qg.ADQmg0TLeW3OC_q-OyHnjPt6hdw');

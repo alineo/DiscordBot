@@ -148,12 +148,14 @@ module.exports = class Play extends Command {
     static stop() {
         this.interrupt = true;
         if (this.voiceChannel) {
+            this.endMusic();
             this.voiceChannel.connection.player.dispatcher.end();
         }
     }
 
     static leave() {
         if (this.voiceChannel)
+            this.endMusic();
             this.voiceChannel.leave();
     }
 };
