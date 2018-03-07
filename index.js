@@ -9,10 +9,11 @@ const Help = require('./commandes/help');
 const Add = require('./commandes/add');
 const Pathfinder = require('./commandes/pathfinder');
 const SearchYoutube = require('./commandes/searchYoutube');
+const MemeList = require('./commandes/memelist');
 
 
 bot.on('ready', function () {
-    bot.user.setActivity('cirer les chaussures de mon Maitre Jules').catch(console.error);
+    bot.user.setActivity('!help | servir Maitre Jules').catch(console.error);
 });
 
 bot.on('message', async function (message) {
@@ -42,10 +43,10 @@ bot.on('message', async function (message) {
         message.channel.send("Bonjour, je suis l'esclave de votre seigneur et maître Jules. Je serais votre humble serviteur afin de remplir le moindre de vos désirs.");
     }
 
-    let CommandeUsed = Google.parse(message) || Help.parse(message) || Pathfinder.parse(message) || SearchYoutube.parse(message);
+    let CommandeUsed = Google.parse(message) || Help.parse(message) || Pathfinder.parse(message) || SearchYoutube.parse(message) || MemeList.parse(message);
 
     if (Play.match(message)) {
-        Play.action(message, Queue);
+        Play.action(message, Queue, SearchYoutube.getListYoutube());
     }
 
     if (Queue.match(message)) {

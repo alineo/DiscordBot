@@ -24,6 +24,7 @@ module.exports = class Queue extends Command {
             let sub = "";
             for (let i = 0; i < this.list.length; i++) {
                 count++;
+                //sub += i + " : **[" +  this.list[i].title + "](" +  this.list[i].link + ")**\n"; // impossible à cause de la limitation de taille
                 sub += i + " : " + this.list[i].title + "\n";
 
                 if (count === 10) {

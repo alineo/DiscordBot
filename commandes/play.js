@@ -4,10 +4,11 @@ const YoutubeStream = require('ytdl-core');
 module.exports = class Play extends Command {
 
     static match(message) {
-        return message.content.startsWith('!play') && !message.content.startsWith('!playlist');
+        return (message.content.startsWith('!play') && !message.content.startsWith('!playlist'))
+            || message.content.startsWith('!ytplay');
     }
 
-    static action(message, queue) {
+    static action(message, queue, queueYT) {
         if (!this.isPlaying)
             this.isPlaying = false;
         if (!this.interrupt)
@@ -26,7 +27,7 @@ module.exports = class Play extends Command {
         }
 
         let args = message.content.split(' ');
-        if (args.length === 1) {
+        if (args[0] === "!play" && args.length === 1) {
             // check if the queue is empty
             let list = queue.getList();
             if (!list || list.length === 0) {
@@ -42,7 +43,7 @@ module.exports = class Play extends Command {
                 })
                 .catch(console.error)
 
-        } else if (!isNaN(parseFloat(args[1])) && isFinite(args[1])) {
+        } else if (args[0] === "!play" && !isNaN(parseFloat(args[1])) && isFinite(args[1])) {
             console.log(args[1] + " est un nombre");
             // joue la musique à l'index args[1] de la queue, vérifier qu'elle existe
             let list = queue.getList();
@@ -52,8 +53,8 @@ module.exports = class Play extends Command {
             }
 
             // the index does not exist
-            if (!list || args[1] >list.length) {
-                message.reply("Ma queue n'est pas aussi grosse, désolé :worried: ");
+            if (!list || args[1] >list.length || args[1] < 0) {
+                message.reply("ma queue n'est pas aussi grosse, désolé :worried: ");
                 return;
             }
 
@@ -65,9 +66,7 @@ module.exports = class Play extends Command {
                 })
                 .catch(console.error)
 
-        } else {
-            console.log(message.content);
-            console.log(args[1] + " est une musique");
+        } else if (args[0] === "!play") {
             // joue le lien
             this.voiceChannel = message.member.voiceChannel;
             this.voiceChannel.join()
@@ -77,6 +76,40 @@ module.exports = class Play extends Command {
                         message.reply("Je n'ai pas réussi à lire la vidéo :/");
                         connection.disconnect();
                     });
+                    connection.playStream(stream).on('end', function () {
+                        Play.endMusic();
+                    });
+                    Play.startMusic();
+                    Play.resume();
+                })
+                .catch(console.error)
+        } else {
+            if (queueYT === undefined) {
+                message.reply("il faut d'abord faire une requête youtube.");
+                return;
+            }
+
+            if (!(!isNaN(parseFloat(args[1])) && isFinite(args[1]))) {
+                message.reply(args[1] + " n'est pas un chiffre...");
+                return;
+            }
+
+            if (args[1] > 4 || args[1] < 0) {
+                message.reply(args[1] + " n'est pas un ciffre valide, choisis entre la vidéo 0 et la vidéo 4");
+                return;
+            }
+
+            console.log(queueYT[args[1]].title + " est une musique");
+            // joue le lien
+            this.voiceChannel = message.member.voiceChannel;
+            this.voiceChannel.join()
+                .then(function (connection) {
+                    let stream = YoutubeStream(queueYT[args[1]].link);
+                    stream.on('error', function () {
+                        message.reply("Je n'ai pas réussi à lire la vidéo :/");
+                        connection.disconnect();
+                    });
+                    message.channel.send("Lancement de **" + queueYT[args[1]].title + "**");
                     connection.playStream(stream).on('end', function () {
                         Play.endMusic();
                     });
