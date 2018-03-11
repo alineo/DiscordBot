@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 module.exports = class Help extends Command {
 
     static match(message) {
-        return message.content.startsWith('!help');
+        return message.content.startsWith('!help') || message.content.startsWith('!?') || message.content.startsWith('!∞?%nick&ta¶mere') || message.content.startsWith('!tasukete');
     }
 
     static action(message) {

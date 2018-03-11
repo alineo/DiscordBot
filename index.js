@@ -11,9 +11,13 @@ const Pathfinder = require('./commandes/pathfinder');
 const SearchYoutube = require('./commandes/searchYoutube');
 const MemeList = require('./commandes/memelist');
 
+let compteur = 0;
+
+
 
 bot.on('ready', function () {
-    bot.user.setActivity('!help | servir Maitre Jules').catch(console.error);
+    bot.user.setPresence({ game: { name: 'Jules <3 | !help', type: 'WATCHING' }, status: 'online' }).then(console.log).catch(console.error);
+    //bot.user.setActivity('!help | servir Maitre Jules').catch(console.error);
 });
 
 bot.on('message', async function (message) {
@@ -37,6 +41,14 @@ bot.on('message', async function (message) {
             mots.shift();
             message.channel.send(mots.join(' '));
         }
+    }
+
+    if (mots[0] === '!compteur') {
+        message.channel.send("Le compteur de Beauf est actuellement à " + compteur);
+    }
+    if (mots[0] === '!beauf') {
+        message.channel.send("Félicitation tu viens de gagner un point Beauf !");
+        compteur++;
     }
 
     if (mots[0] === '!presentation') {
@@ -67,6 +79,10 @@ bot.on('message', async function (message) {
     }
     if (mots[0] === '!leave' && mots.length === 1) {
         Play.leave();
+    }
+    if (mots[0] === '!clear' && mots.length === 1) {
+        Queue.clear();
+        message.channel.send("La queue est vidée.");
     }
 
     if (mots[0] === '!parle' && mots.length === 1) {
