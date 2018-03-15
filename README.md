@@ -10,7 +10,7 @@ Avant de pouvoir utiliser le bot, il est nécessaire d'effectuer les étapes sui
 
 Les modules suivants doivent être installés :
 ```nodejs
-npm install disocrd.js
+npm install discord.js
 npm install ytdl
 npm install ffmpeg-binaries
 npm install node-opus
