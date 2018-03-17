@@ -31,8 +31,8 @@ Voici la liste exhaustives des commandes supportées par Sir Mondrian
 
 ### Vue globale
 
-| Commande      | Paramètres           | Description                       |
-|---------------|----------------------|-----------------------------------|
+|   Commande    |     Paramètres       |            Description            |
+|:-------------:|:--------------------:|:---------------------------------:|
 | !presentation | []                   | Humble présentation               |
 | !dit          | [texte]              | Faire le perroquet                |
 | !google       | [texte]              | Rechercher ce que vous voulez     |
