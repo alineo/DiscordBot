@@ -10,13 +10,11 @@ const Add = require('./commandes/add');
 const Pathfinder = require('./commandes/pathfinder');
 const SearchYoutube = require('./commandes/searchYoutube');
 const MemeList = require('./commandes/memelist');
-
-let compteur = 0;
-
-
+const Delete = require('./commandes/delete');
+const Avatar = require('./commandes/avatar');
 
 bot.on('ready', function () {
-    bot.user.setPresence({ game: { name: 'Jules <3 | !help', type: 'WATCHING' }, status: 'online' }).then(console.log).catch(console.error);
+    bot.user.setPresence({ game: { name: 'Jules <3 | !help', type: 'WATCHING' }, status: 'online' })/*.then(console.log)*/.catch(console.error);
     //bot.user.setActivity('!help | servir Maitre Jules').catch(console.error);
 });
 
@@ -39,34 +37,44 @@ bot.on('message', async function (message) {
     if (mots[0] === '!dit') {
         if (mots.length > 1) {
             mots.shift();
-            message.channel.send(mots.join(' '));
+            message.delete();
+            message.channel.send(mots.join(' '), {tts: true});
         }
     }
 
-    if (mots[0] === '!compteur') {
-        message.channel.send("Le compteur de Beauf est actuellement à " + compteur);
-    }
-    if (mots[0] === '!beauf') {
-        message.channel.send("Félicitation tu viens de gagner un point Beauf !");
-        compteur++;
+    if (mots[0] === '!oklol') {
+        if (mots.length > 1) {
+            mots.shift();
+            message.delete();
+            message.channel.send(mots.join(' '), {tts: true});
+            const fetchedMessages = await message.channel.fetchMessages({limit: 1});
+            message.channel.bulkDelete(fetchedMessages)
+                .catch(console.error);
+        }
     }
 
     if (mots[0] === '!presentation') {
-        message.channel.send("Bonjour, je suis l'esclave de votre seigneur et maître Jules. Je serais votre humble serviteur afin de remplir le moindre de vos désirs.");
+        message.channel.send("Bonjour, je suis Sir Mondrian, l'esclave de votre seigneur et maître Jules. Je serais votre humble serviteur afin de remplir le moindre de vos désirs.", {tts: true});
     }
 
-    let CommandeUsed = Google.parse(message) || Help.parse(message) || Pathfinder.parse(message) || SearchYoutube.parse(message) || MemeList.parse(message);
+    let CommandeUsed = Google.parse(message) || Help.parse(message) ||
+                       Pathfinder.parse(message) || SearchYoutube.parse(message) ||
+                       MemeList.parse(message) || Delete.parse(message);
 
     if (Play.match(message)) {
         Play.action(message, Queue, SearchYoutube.getListYoutube());
     }
-
-    if (Queue.match(message)) {
+    else if (Queue.match(message)) {
         Queue.action(message);
-    } else if (Add.match(message)) {
+    }
+    else if (Add.match(message)) {
         let musics = await Add.action(message).catch(console.error);
         Queue.add(message, musics);
     }
+    else if (Avatar.match(message)) {
+        Avatar.action(message, bot);
+    }
+
 
     if (mots[0] === '!pause' && mots.length === 1) {
         Play.pause();
@@ -93,4 +101,4 @@ bot.on('message', async function (message) {
     }
 });
 
-bot.login('NDE3MDcwNjg0OTY0MTI2NzIw.DXa_Qg.ADQmg0TLeW3OC_q-OyHnjPt6hdw');
+bot.login('NDI0NTQwODcyODY1MjE4NTYw.DY6YAw.mZ0g3lu75yVThAyEkf6WgueigJY');

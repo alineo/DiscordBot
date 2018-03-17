@@ -8,12 +8,11 @@ module.exports = class Play extends Command {
             || message.content.startsWith('!ytplay');
     }
 
-    static action(message, queue, queueYT) {
+    static async action(message, queue, queueYT) {
         if (!this.isPlaying)
             this.isPlaying = false;
         if (!this.interrupt)
             this.interrupt = false;
-
 
         if (!message.member.voiceChannel) {
             message.reply('Il faut être dans un channel vocal !');
@@ -27,9 +26,11 @@ module.exports = class Play extends Command {
         }
 
         let args = message.content.split(' ');
+        // play the first queue
         if (args[0] === "!play" && args.length === 1) {
             // check if the queue is empty
-            let list = queue.getList();
+            let list = queue.getList(); // get the first queue
+            queue.setMainList(list);
             if (!list || list.length === 0) {
                 message.reply('La queue est vide, lol.');
                 return;
@@ -43,46 +44,39 @@ module.exports = class Play extends Command {
                 })
                 .catch(console.error)
 
-        } else if (args[0] === "!play" && !isNaN(parseFloat(args[1])) && isFinite(args[1])) {
-            console.log(args[1] + " est un nombre");
+        // play the music X from que origine or designated queue
+        } else if (args[0] === "!play" && !isNaN(parseFloat(args[args.length - 1])) && isFinite(args[args.length - 1])) {
+            console.log(args[args.length - 1] + " est un nombre");
             // joue la musique à l'index args[1] de la queue, vérifier qu'elle existe
-            let list = queue.getList();
-            if (!list || list.length === 0) {
-                message.reply('Ma queue est vide, lol.');
-                return;
-            }
+            Play.playFromQueue(args, queue, message, args[args.length - 1]);
 
-            // the index does not exist
-            if (!list || args[1] >list.length || args[1] < 0) {
-                message.reply("ma queue n'est pas aussi grosse, désolé :worried: ");
-                return;
-            }
-
-            this.voiceChannel = message.member.voiceChannel;
-            this.voiceChannel.join()
-                .then(function (connection) {
-                    // play the music with the index 0
-                    Play.playMusic(message, queue, args[1], connection);
-                })
-                .catch(console.error)
-
+        // play from a youtube link or a queue
         } else if (args[0] === "!play") {
-            // joue le lien
-            this.voiceChannel = message.member.voiceChannel;
-            this.voiceChannel.join()
-                .then(function (connection) {
-                    let stream = YoutubeStream(args[1]);
-                    stream.on('error', function () {
-                        message.reply("Je n'ai pas réussi à lire la vidéo :/");
-                        connection.disconnect();
-                    });
-                    connection.playStream(stream).on('end', function () {
-                        Play.endMusic();
-                    });
-                    Play.startMusic();
-                    Play.resume();
-                })
-                .catch(console.error)
+            let substring = "youtube.com";
+
+            if (message.content.indexOf(substring) === -1) { // play from a designated queue
+                Play.playFromQueue(args, queue, message, 0);
+            } else { // play from a youtube link
+                // joue le lien
+                this.voiceChannel = message.member.voiceChannel;
+                this.voiceChannel.join()
+                    .then(function (connection) {
+                        let stream = YoutubeStream(args[1]);
+                        stream.on('error', function () {
+                            message.reply("Je n'ai pas réussi à lire la vidéo :/");
+                            connection.disconnect();
+                        });
+                        connection.playStream(stream).on('end', function () {
+                            Play.endMusic();
+                        });
+                        Play.startMusic();
+                        Play.resume();
+                    })
+                    .catch(function () {
+                        message.reply("La vidéo n'a pas été trouvée.");
+                    })
+            }
+
         } else {
             if (queueYT === undefined) {
                 message.reply("il faut d'abord faire une requête youtube.");
@@ -122,6 +116,46 @@ module.exports = class Play extends Command {
         this.interrupt = false;
     }
 
+    static playFromQueue(args, queue, message, startIndex) {
+        let queueName = "";
+        let length = args.length === 2 ? 2 : args.length -1;
+        for(let i = 1; i < length; i++) {
+            queueName += args[i] + " ";
+        }
+        queueName = queueName.trim();
+
+        let list = queue.getListName(queueName);
+        console.log("cherche '" + queueName + "'");
+        if (list === null) {
+            message.reply("La playlist '" + queueName + "' n'existe pas");
+            return;
+        }
+        queue.setMainList(list);
+
+        if (!list || list.length === 0) {
+            message.reply('Ma queue est vide, lol.');
+            return;
+        }
+
+        // the index does not exist
+        if (startIndex >list.length) {
+            message.reply("ma queue n'est pas aussi grosse, désolé :worried: ");
+            return;
+        }
+        if (startIndex < 0) {
+            message.reply("Bien joué p'tit malin, essaye un nombre positif à la place.");
+            return;
+        }
+
+        this.voiceChannel = message.member.voiceChannel;
+        this.voiceChannel.join()
+            .then(function (connection) {
+                // play the music with the index 0
+                Play.playMusic(message, queue, startIndex, connection);
+            })
+            .catch(console.error)
+    }
+
     static endMusic() {
         console.log("Fin de musique");
         this.isPlaying = false;
@@ -148,7 +182,6 @@ module.exports = class Play extends Command {
 
         // read end
         connection.playStream(stream).on('end', function () {
-            console.log("fin de la musique");
             Play.endMusic();
             Play.playNext(message, queue, index, connection);
         });

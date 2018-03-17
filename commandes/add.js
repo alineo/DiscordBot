@@ -8,22 +8,53 @@ module.exports = class Playlist extends Command {
     }
 
     static async action(message) {
-        let youtube = new Youtube();
-
-        if (message.content.startsWith('!add witcher')) {
-            message.channel.send("La playlist de 'The Witcher 3' a été ajoutée à la queue.");
-            return this.parsePlayList("PLgJZQv8L8x5nl1J0gvkIc5EKIaL_eaF0p", youtube);
-        }else if (message.content.startsWith('!add automata') || message.content.startsWith('!add nier')) {
-            message.channel.send("La playlist de 'Nier: Automata' a été ajoutée à la queue.");
-            return this.parsePlayList("PLKW8Zk74zg-Tg-nJmzd35F8csqI6LANN-", youtube);
-        }
+        // object which contains the playlist of musics and the name of the queue to put them on
+        let objectReturn = {
+            playlist: null,
+            queue: null
+        };
 
         let msg = message.content;
+        // get the name of the queue to put the playlist
+        let args = msg.split(' ');
+        if (args.length === 1) {
+            return null;
+        } else if (args.length === 2) {
+            objectReturn.queue = "origine";
+        } else {
+            let queueName = "";
+            for(let i = 1; i < args.length -1; i++) {
+                queueName += args[i] + " ";
+            }
+            queueName = queueName.trim();
+            objectReturn.queue = queueName;
+        }
+
+        let youtube = new Youtube();
+
+        console.log(args[args.length-1]);
+        // special playlists already stored in the code
+        if (args[args.length-1] === 'witcher') {
+            message.channel.send("La playlist de 'The Witcher 3' a été ajoutée à la queue.");
+            objectReturn.playlist = await Playlist.parsePlayList("PLgJZQv8L8x5nl1J0gvkIc5EKIaL_eaF0p", youtube);
+            return objectReturn;
+        }else if (args[args.length-1] === 'automata' || args[args.length-1] === 'nier') {
+            message.channel.send("La playlist de 'Nier: Automata' a été ajoutée à la queue.");
+            objectReturn.playlist = await Playlist.parsePlayList("PLKW8Zk74zg-Tg-nJmzd35F8csqI6LANN-", youtube);
+            return objectReturn;
+        }
+
         let indexList = msg.indexOf("list=");
+        if (indexList === -1) {
+            return null;
+        }
 
         let list = [];
         if (indexList === -1) {
             let indexV = msg.indexOf("v=");
+            if (indexV === -1) {
+                return null;
+            }
             let id = msg.substring(indexV+2, msg.length);
 
             let videos = await youtube.parseVideo(id).catch(console.error);
@@ -37,8 +68,8 @@ module.exports = class Playlist extends Command {
             return list;
         } else {
             let listId = msg.substring(indexList+5, msg.length);
-
-            return this.parsePlayList(listId, youtube);
+            objectReturn.playlist = await Playlist.parsePlayList(listId, youtube);
+            return objectReturn;
         }
     }
 

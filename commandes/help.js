@@ -12,7 +12,7 @@ module.exports = class Help extends Command {
         let args = message.content.split(' ');
 
         const embed = new Discord.RichEmbed()
-            .setAuthor("Yay quelqu'un a besoin de mon aide", 'https://i.imgur.com/j7Yiy7u.jpg')
+            .setAuthor("Yay quelqu'un a besoin de mon aide :D", 'https://i.imgur.com/j7Yiy7u.jpg')
 
             .setTimestamp()
 
@@ -28,6 +28,9 @@ module.exports = class Help extends Command {
             commandes += "\n";
             commandes += "\n";
             commandes += "!queue\n";
+            commandes += "\n";
+            commandes += "!queuelist\n";
+            commandes += "!queueadd\n";
             commandes += "!pause\n";
             commandes += "!resume\n";
             commandes += "!stop\n";
@@ -35,16 +38,22 @@ module.exports = class Help extends Command {
             commandes += "!pf\n";
             commandes += "!yt\n";
             commandes += "!ytplay\n";
+            commandes += "!avatar\n";
+            commandes += "\n";
+            commandes += "!delete\n";
 
             let parametres = "[]\n";
             parametres += "[texte]\n";
             parametres += "[texte]\n";
-            parametres += "[playlist]\n";
+            parametres += "<[queue]> [playlist]\n";
+            parametres += "<[queue]> [musique]\n";
             parametres += "[musique]\n";
-            parametres += "[musique]\n";
-            parametres += "[nombre]\n";
+            parametres += "<[queue]> [nombre]\n";
+            parametres += "<[queue]> []\n";
+            parametres += "[texte]\n";
             parametres += "[]\n";
             parametres += "[]\n";
+            parametres += "[texte]\n";
             parametres += "[]\n";
             parametres += "[]\n";
             parametres += "[]\n";
@@ -52,23 +61,32 @@ module.exports = class Help extends Command {
             parametres += "[texte]\n";
             parametres += "[texte]\n";
             parametres += "[chiffre]\n";
+            parametres += "[utilisateur]\n";
+            parametres += "[]\n";
+            parametres += "[nombre]\n";
 
-            let descriptions = "humble présentation\n";
-            descriptions += "faire le perroquet\n";
-            descriptions += "rechercher ce que vous voulez\n";
-            descriptions += "ajouter la playlist à la queue\n";
-            descriptions += "ajouter la musique à la queue\n";
-            descriptions += "jouer la musique\n";
-            descriptions += "jouer les musique de la queue\n";
-            descriptions += "jouer la musique 0 de la queue\n";
-            descriptions += "voir les musiques de la queue\n";
-            descriptions += "mettre la musique en pause\n";
-            descriptions += "reprendre la musique en pause\n";
-            descriptions += "arrêter de jouer la musique\n";
-            descriptions += "quitter le channel vocal\n";
-            descriptions += "rechercher sur pathfinder\n";
-            descriptions += "rechercher sur youtube\n";
-            descriptions += "lancer musique cherchée par !yt\n";
+            let descriptions = "Humble présentation\n";
+            descriptions += "Faire le perroquet\n";
+            descriptions += "Rechercher ce que vous voulez\n";
+            descriptions += "Ajouter la playlist à la queue\n";
+            descriptions += "Ajouter la musique à la queue\n";
+            descriptions += "Jouer la musique\n";
+            descriptions += "Jouer les musique de la queue\n";
+            descriptions += "Jouer la musique 0 de la queue\n";
+            descriptions += "Voir les musiques de la queue\n";
+            descriptions += "Voir la liste des queues\n";
+            descriptions += "Voir la liste des queues\n";
+            descriptions += "Créer une queue\n";
+            descriptions += "Mettre la musique en pause\n";
+            descriptions += "Reprendre la musique en pause\n";
+            descriptions += "Arrêter de jouer la musique\n";
+            descriptions += "Quitter le channel vocal\n";
+            descriptions += "Rechercher sur pathfinder\n";
+            descriptions += "Rechercher sur youtube\n";
+            descriptions += "Lancer musique cherchée par !yt\n";
+            descriptions += "Affiche l'avatar de l'utilisateur\n";
+            descriptions += "Affiche son avatar\n";
+            descriptions += "Supprime les derniers messages\n";
 
             embed.setColor(0x00AE86)
                  .addField("Commande", commandes, true)
@@ -111,21 +129,34 @@ module.exports = class Help extends Command {
             }
             else if (cmd === "add") {
                 name = "!add";
-                description = "**Description** : Le bot ajoute la musique ou la playlist que vous lui passez à sa queue\n" +
-                    "**Syntaxe** : !add [playlist] ou !add [musique]\n" +
-                    "**Exemple** : !add https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+                description = "**Description** : Le bot ajoute la musique ou la playlist que vous lui passez à la queue précisée ou 'origine' par défaut\n" +
+                    "**Syntaxe** : !add [queue] [playlist] ou !add [playlist] ou !add [queue] [musique] ou !add [musique]\n" +
+                    "**Exemple** : !add Musique RPG https://www.youtube.com/watch?v=dQw4w9WgXcQ";
             }
             else if (cmd === "play") {
                 name = "!play";
-                description = "**Description** : Le bot joue soit la musique passée, soit la musique correspondant à l'index dans la queue, soit la queue en commencant par l'index 0\n" +
-                    "**Syntaxe** : !play [musique] ou !play [nombre] ou !play\n" +
-                    "**Exemple** : !play https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+                description = "**Description** : Le bot joue soit la musique passée, soit la musique correspondant à l'index ou 0 par défaut dans la queue précisée ou la première par défaut\n" +
+                    "**Syntaxe** : !play [musique] ou !play [nombre] ou !play [queue] [nombre] ou !play [queue] ou !play\n" +
+                    "**Exemples** : !play https://www.youtube.com/watch?v=dQw4w9WgXcQ\n" +
+                    "                     !play Musiques RPG 5";
             }
             else if (cmd === "queue") {
                 name = "!queue";
-                description = "**Description** : Le bot vous envoie sa queue avec l'index correspondant à chaque musique\n" +
-                    "**Syntaxe** : !queue\n" +
-                    "**Exemple** : !queue";
+                description = "**Description** : Affiche la liste des queues ou affiche les musiques d'une queue si un nom est précisé\n" +
+                    "**Syntaxe** : !queue [texte] ou !queue\n" +
+                    "**Exemple** : !queue nom de la queue";
+            }
+            else if (cmd === "queuelist") {
+                name = "!queuelist";
+                description = "**Description** : Affiche la liste des queues\n" +
+                    "**Syntaxe** : !queuelist\n" +
+                    "**Exemple** : !queuelist";
+            }
+            else if (cmd === "queueadd") {
+                name = "!queueadd";
+                description = "**Description** : Créer une nouvelle queue avec le nom qui suit la commande\n" +
+                    "**Syntaxe** : !queueadd [texte]\n" +
+                    "**Exemple** : !queueadd Musiques RPG";
             }
             else if (cmd === "pause") {
                 name = "!pause";
@@ -168,6 +199,18 @@ module.exports = class Help extends Command {
                 description = "**Description** : Le bot lance la musique correspondant à une recherche '!yt' précédemment effectuée\n" +
                     "**Syntaxe** : !ytplay [chiffre]\n" +
                     "**Exemple** : !ytplay 2";
+            }
+            else if (cmd === "avatar") {
+                name = "!avatar";
+                description = "**Description** : Affiche son propre avatar ou celui de la personne désignée\n" +
+                    "**Syntaxe** : !avatar [utilisateur] ou !avatar\n" +
+                    "**Exemple** : !avatar @Sir Mondrian#0896";
+            }
+            else if (cmd === "delete") {
+                name = "!delete";
+                description = "**Description** : Supprime les derniers message du channel\n" +
+                    "**Syntaxe** : !delete [nombre]\n" +
+                    "**Exemple** : !delete 25";
             }
             else {
                 name = "!" + cmd;
