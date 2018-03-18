@@ -26,7 +26,7 @@ module.exports = class Queue extends Command {
                 let sub = "";
                 for (let i = 0; i < this.queues.length; i++) {
                     count++;
-                    sub += i + " : " + this.queues[i].name + "\n";
+                    sub += "- " + this.queues[i].name + "\n";
 
                     if (count === 10) {
                         embed.addField("Queues", sub);
@@ -53,8 +53,18 @@ module.exports = class Queue extends Command {
                 message.channel.send("La queue '" + queueName + "' existe déjà.");
             }
             return;
+        } else if (message.content.startsWith("!queueremove ")) {
+            let indexV = msg.indexOf("!queueadd ");
+            let queueName = msg.substring(indexV+14, msg.length);
+
+            if (Queue.removeQueue(queueName)) {
+                message.channel.send("La queue '" + queueName + "' a été supprimée.");
+            } else {
+                message.channel.send("La queue '" + queueName + "' n'existe pas ou n'a pas pu être supprimée.");
+            }
+            return;
         // lister les musiques d'une queue ou de la première queue
-        } else if (message.content.startsWith("!queue")) {
+        } else if (message.content.startsWith("!queue ")) {
             let queueName;
             // there is no queue
             if (!this.queues || this.queues.length === 0) {
@@ -74,6 +84,9 @@ module.exports = class Queue extends Command {
                     .setColor(0x6666ff);
                 Queue.addMusicsToEmbed(queueName, embed);
             }
+        } else {
+            message.channel.send("Commande invalide, consultez l'aide de la commande que vous souhaitez effectuer.");
+            return;
         }
         message.channel.send({embed});
     }
@@ -124,8 +137,26 @@ module.exports = class Queue extends Command {
         return Queue.findQueue(queueName);
     }
 
-    static clear() {
-        this.queues[0].musics = [];
+    static removeQueue(queueName) {
+        if (!this.queues) {
+            return false;
+        }
+        for (let i = 0; i < this.queues.length; i++) {
+            if (this.queues[i].name === queueName) {
+                this.queues.splice(i, i+1);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static clear(queueName) {
+        let queue = Queue.findQueue(queueName);
+        if (queue !== null) {
+            queue.musics = [];
+            return true;
+        }
+        return false;
     }
 
     static getList() {

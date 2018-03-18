@@ -15,8 +15,9 @@ const Avatar = require('./commandes/avatar');
 
 bot.on('ready', function () {
     bot.user.setPresence({ game: { name: 'Jules <3 | !help', type: 'WATCHING' }, status: 'online' })/*.then(console.log)*/.catch(console.error);
-    //bot.user.setActivity('!help | servir Maitre Jules').catch(console.error);
+    console.log("Sir Mondrian prêt");
 });
+
 
 bot.on('message', async function (message) {
     let mots = message.content.split(" ");
@@ -59,13 +60,11 @@ bot.on('message', async function (message) {
 
     let CommandeUsed = Google.parse(message) || Help.parse(message) ||
                        Pathfinder.parse(message) || SearchYoutube.parse(message) ||
-                       MemeList.parse(message) || Delete.parse(message);
+                       MemeList.parse(message) || Delete.parse(message) ||
+                       Queue.parse(message);
 
     if (Play.match(message)) {
         Play.action(message, Queue, SearchYoutube.getListYoutube());
-    }
-    else if (Queue.match(message)) {
-        Queue.action(message);
     }
     else if (Add.match(message)) {
         let musics = await Add.action(message).catch(console.error);
@@ -88,9 +87,12 @@ bot.on('message', async function (message) {
     if (mots[0] === '!leave' && mots.length === 1) {
         Play.leave();
     }
-    if (mots[0] === '!clear' && mots.length === 1) {
-        Queue.clear();
-        message.channel.send("La queue est vidée.");
+    if (mots[0] === '!clear' && mots.length === 2) {
+        if (Queue.clear(mots[1]))
+            message.channel.send("La queue " + mots[1] + " est vidée.");
+        else
+            message.channel.send("Impossible de vider la queue " + mots[1] + ".");
+
     }
 
     if (mots[0] === '!parle' && mots.length === 1) {

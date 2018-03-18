@@ -31,6 +31,7 @@ module.exports = class Help extends Command {
             commandes += "\n";
             commandes += "!queuelist\n";
             commandes += "!queueadd\n";
+            commandes += "!queueremove\n";
             commandes += "!pause\n";
             commandes += "!resume\n";
             commandes += "!stop\n";
@@ -53,6 +54,7 @@ module.exports = class Help extends Command {
             parametres += "[texte]\n";
             parametres += "[]\n";
             parametres += "[]\n";
+            parametres += "[texte]\n";
             parametres += "[texte]\n";
             parametres += "[]\n";
             parametres += "[]\n";
@@ -77,6 +79,7 @@ module.exports = class Help extends Command {
             descriptions += "Voir la liste des queues\n";
             descriptions += "Voir la liste des queues\n";
             descriptions += "Créer une queue\n";
+            descriptions += "Supprimer une queue\n";
             descriptions += "Mettre la musique en pause\n";
             descriptions += "Reprendre la musique en pause\n";
             descriptions += "Arrêter de jouer la musique\n";
@@ -157,6 +160,12 @@ module.exports = class Help extends Command {
                 description = "**Description** : Créer une nouvelle queue avec le nom qui suit la commande\n" +
                     "**Syntaxe** : !queueadd [texte]\n" +
                     "**Exemple** : !queueadd Musiques RPG";
+            }
+            else if (cmd === "queueremove") {
+                name = "!queueremove";
+                description = "**Description** : Supprimer la queue dont le nom correspond au texte qui suit la commande\n" +
+                    "**Syntaxe** : !queueremove [texte]\n" +
+                    "**Exemple** : !queueremove Musiques RPG";
             }
             else if (cmd === "pause") {
                 name = "!pause";

@@ -100,6 +100,11 @@ Voici la liste exhaustives des commandes supportées par Sir Mondrian
 **Syntaxe** : !queueadd [texte]  
 **Exemple** : !queueadd Musiques RPG
 
+#### !queueremove
+**Description** : Supprimer la queue dont le nom correspond au texte qui suit la commande  
+**Syntaxe** : !queueremove [texte]  
+**Exemple** : !queueremove Musiques RPG
+
 #### !pause
 **Description** : Le bot met la musique qu'il est en train de jouer, si il y en a une, en pause  
 **Syntaxe** : !pause  
