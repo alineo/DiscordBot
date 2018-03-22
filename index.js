@@ -23,6 +23,10 @@ bot.on('ready', function () {
 
 bot.on('message', async function (message) {
     let mots = message.content.split(" ");
+
+    if (mots[0] === '!git') {
+        message.channel.send('https://github.com/alineo/Sir-Mondrian');
+    }
     if (mots[0] === '!suce') {
         //message.reply('ma bite'); envoie un message à l'utilisateur concerné
         message.channel.send('ma bite');
