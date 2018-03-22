@@ -150,6 +150,11 @@ Voici la liste exhaustives des commandes supportées par Sir Mondrian
 **Syntaxe** : !delete [nombre]  
 **Exemple** : !delete 25
 
+#### !git
+**Description** : Renvoie le lien du dépôt Git de Sir Mondrian  
+**Syntaxe** : !git  
+**Exemple** : !git
+
 
 ## Remerciements
 

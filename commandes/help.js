@@ -42,6 +42,7 @@ module.exports = class Help extends Command {
             commandes += "!avatar\n";
             commandes += "\n";
             commandes += "!delete\n";
+            commandes += "!git\n";
 
             let parametres = "[]\n";
             parametres += "[texte]\n";
@@ -66,6 +67,7 @@ module.exports = class Help extends Command {
             parametres += "[utilisateur]\n";
             parametres += "[]\n";
             parametres += "[nombre]\n";
+            parametres += "[]\n";
 
             let descriptions = "Humble présentation\n";
             descriptions += "Faire le perroquet\n";
@@ -90,6 +92,7 @@ module.exports = class Help extends Command {
             descriptions += "Affiche l'avatar de l'utilisateur\n";
             descriptions += "Affiche son avatar\n";
             descriptions += "Supprime les derniers messages\n";
+            descriptions += "Envoie le git de Sir Mondrian\n";
 
             embed.setColor(0x00AE86)
                  .addField("Commande", commandes, true)
@@ -220,6 +223,12 @@ module.exports = class Help extends Command {
                 description = "**Description** : Supprime les derniers message du channel\n" +
                     "**Syntaxe** : !delete [nombre]\n" +
                     "**Exemple** : !delete 25";
+            }
+            else if (cmd === "git") {
+                name = "!git";
+                description = "**Description** : Renvoie le lien du dépôt Git de Sir Mondrian\n" +
+                    "**Syntaxe** : !git\n" +
+                    "**Exemple** : !git";
             }
             else {
                 name = "!" + cmd;
