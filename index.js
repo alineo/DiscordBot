@@ -1,3 +1,5 @@
+const KEY_BOT = require('./variables').KEY_BOT;
+
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const fs = require('fs');
@@ -37,9 +39,19 @@ bot.on('message', async function (message) {
 
     if (mots[0] === '!dit') {
         if (mots.length > 1) {
-            mots.shift();
             message.delete();
-            message.channel.send(mots.join(' '), {tts: true});
+            if (mots.length === 2 && (!isNaN(parseFloat(mots[1])) && isFinite(mots[1]))) {
+                console.log(mots[1]);
+                if (mots[1] === "23")
+                    message.channel.send("Est-ce que je vous ai déjà raconté la fois où j'ai eu un coup de soleil ?", {tts: true});
+                else {
+                    mots.shift();
+                    message.channel.send(mots.join(' '), {tts: true});
+                }
+            } else {
+                mots.shift();
+                message.channel.send(mots.join(' '), {tts: true});
+            }
         }
     }
 
@@ -103,4 +115,4 @@ bot.on('message', async function (message) {
     }
 });
 
-bot.login('NDI0NTQwODcyODY1MjE4NTYw.DY6YAw.mZ0g3lu75yVThAyEkf6WgueigJY');
+bot.login(KEY_BOT);

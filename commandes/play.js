@@ -44,7 +44,7 @@ module.exports = class Play extends Command {
                 })
                 .catch(console.error)
 
-        // play the music X from que origine or designated queue
+        // play the music at the index X from que origine or designated queue
         } else if (args[0] === "!play" && !isNaN(parseFloat(args[args.length - 1])) && isFinite(args[args.length - 1])) {
             console.log(args[args.length - 1] + " est un nombre");
             // joue la musique à l'index args[1] de la queue, vérifier qu'elle existe
