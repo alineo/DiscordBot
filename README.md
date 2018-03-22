@@ -158,4 +158,4 @@ Voici la liste exhaustives des commandes supportées par Sir Mondrian
 
 ## Remerciements
 
-Je me remerciement chaleureusement moi-même, sans qui ce projet n'aurait jamais vu le jour.
+Je me remercie chaleureusement moi-même, sans qui ce projet n'aurait jamais vu le jour.
