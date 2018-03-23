@@ -103,19 +103,13 @@ bot.on('message', async function (message) {
     if (mots[0] === '!leave' && mots.length === 1) {
         Play.leave();
     }
-    if (mots[0] === '!clear' && mots.length === 2) {
-        if (Queue.clear(mots[1]))
-            message.channel.send("La queue " + mots[1] + " est vidée.");
+    if (mots[0] === '!clear' && mots.length >= 2) {
+        mots.shift();
+        if (Queue.clear(mots.join(' ')))
+            message.channel.send("La queue " + mots.join(' ') + " est vidée.");
         else
-            message.channel.send("Impossible de vider la queue " + mots[1] + ".");
+            message.channel.send("Impossible de vider la queue " + mots.join(' ') + ".");
 
-    }
-
-    if (mots[0] === '!parle' && mots.length === 1) {
-        fs.readFile('test.txt', 'utf8', function(err, contents) {
-            console.log(contents);
-        });
-        console.log('after calling readFile');
     }
 });
 
