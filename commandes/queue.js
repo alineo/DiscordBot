@@ -150,6 +150,31 @@ module.exports = class Queue extends Command {
         return false;
     }
 
+    static shuffle(message, queueName) {
+        let queue;
+        if (queueName === "") {
+            if (!this.queues || this.queues.length === 0) {
+                message.channel.send("Queue non trouvée.");
+                return;
+            }
+            queue = this.queues[0].musics;
+        } else
+            queue = Queue.findQueue(queueName).musics;
+        if (queue === null) {
+            message.channel.send("Queue " + queueName + " non trouvée.");
+            return;
+        }
+
+        for (let i = queue.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [queue[i], queue[j]] = [queue[j], queue[i]];
+        }
+
+        message.channel.send("Et hop, j'ai remué la queue :smirk:");
+    }
+
+
+
     static clear(queueName) {
         let queue = Queue.findQueue(queueName);
         if (queue !== null) {

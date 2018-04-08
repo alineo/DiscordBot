@@ -24,6 +24,8 @@ module.exports = class Help extends Command {
             commandes += "!google\n";
             commandes += "!add\n";
             commandes += "\n";
+            commandes += "!shuffle\n";
+            commandes += "\n";
             commandes += "!play\n";
             commandes += "\n";
             commandes += "\n";
@@ -49,6 +51,8 @@ module.exports = class Help extends Command {
             parametres += "[texte]\n";
             parametres += "<[queue]> [playlist]\n";
             parametres += "<[queue]> [musique]\n";
+            parametres += "[queue]\n";
+            parametres += "[]\n";
             parametres += "[musique]\n";
             parametres += "<[queue]> [nombre]\n";
             parametres += "<[queue]> []\n";
@@ -74,6 +78,8 @@ module.exports = class Help extends Command {
             descriptions += "Rechercher ce que vous voulez\n";
             descriptions += "Ajouter la playlist à la queue\n";
             descriptions += "Ajouter la musique à la queue\n";
+            descriptions += "Mélanger les musiques\n";
+            descriptions += "Mélanger les musiques \n";
             descriptions += "Jouer la musique\n";
             descriptions += "Jouer les musique de la queue\n";
             descriptions += "Jouer la musique 0 de la queue\n";
@@ -138,6 +144,12 @@ module.exports = class Help extends Command {
                 description = "**Description** : Le bot ajoute la musique ou la playlist que vous lui passez à la queue précisée ou 'origine' par défaut\n" +
                     "**Syntaxe** : !add [queue] [playlist] ou !add [playlist] ou !add [queue] [musique] ou !add [musique]\n" +
                     "**Exemple** : !add Musique RPG https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+            }
+            else if (cmd === "shuffle") {
+                name = "!shuffle";
+                description = "**Description** : Le bot mélange les musiques de la queue précisée ou de la première queue par défaut\n" +
+                    "**Syntaxe** : !shuffle [queue] ou !shuffle\n" +
+                    "**Exemples** : !shuffle Musique RPG";
             }
             else if (cmd === "play") {
                 name = "!play";

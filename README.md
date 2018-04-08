@@ -38,6 +38,8 @@ Voici la liste exhaustives des commandes supportées par Sir Mondrian
 | !google       | [texte]              | Rechercher ce que vous voulez     |
 | !add          | <[queue]> [playlist] | Ajouter la playlist à la queue    |
 |               | <[queue]> [musique]  | Ajouter la musique à la queue     |
+| !shuffle      | [queue]              | Mélange les musiques de la queue  |
+|               | []                   | Mélange les musiques de la queue 0|
 | !play         | [musique]            | Jouer la musique                  |
 |               | <[queue]> [nombre]   | Jouer les musique de la queue     |
 |               | <[queue]> []         | Jouer la musique 0 de la queue    |
@@ -77,6 +79,11 @@ Voici la liste exhaustives des commandes supportées par Sir Mondrian
 **Description** : Le bot ajoute la musique ou la playlist que vous lui passez à la queue précisée ou 'origine' par défaut  
 **Syntaxe** : !add [queue] [playlist] ou !add [playlist] ou !add [queue] [musique] ou !add [musique]  
 **Exemple** : !add Musique RPG https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+#### !shuffle
+**Description** : Le bot mélange les musiques de la queue précisée ou de la première queue par défaut  
+**Syntaxe** : !shuffle [queue] ou !shuffle
+**Exemple** : !shuffle Musique RPG
 
 #### !play
 **Description** : Le bot joue soit la musique passée, soit la musique correspondant à l'index ou 0 par défaut dans la queue précisée ou la première par défaut  

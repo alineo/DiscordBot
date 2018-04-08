@@ -23,6 +23,7 @@ bot.on('ready', function () {
 
 bot.on('message', async function (message) {
     let mots = message.content.split(" ");
+    mots[0] = mots[0].toLowerCase();
 
     if (mots[0] === '!git') {
         message.channel.send('https://github.com/alineo/Sir-Mondrian');
@@ -110,6 +111,10 @@ bot.on('message', async function (message) {
         else
             message.channel.send("Impossible de vider la queue " + mots.join(' ') + ".");
 
+    }
+    if (mots[0] === "!shuffle") {
+        mots.shift();
+        Queue.shuffle(message, mots.join(' '));
     }
 });
 
