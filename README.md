@@ -4,6 +4,7 @@
 - [Commandes](#commandes)
     * [Vue globale](#vue-globale)
     * [Descriptions détaillées](#descriptions-détaillées)
+- [Améliorations](#améliorations)
 - [Remerciements](#remerciements)
 
 
@@ -161,6 +162,11 @@ Voici la liste exhaustives des commandes supportées par Sir Mondrian
 **Description** : Renvoie le lien du dépôt Git de Sir Mondrian  
 **Syntaxe** : !git  
 **Exemple** : !git
+
+
+## Améliorations
+
+Si vous avez des idées d'améliorations, ou simplement des remarques à faire sur le bot, vous pouvez créer une "issue" avec comme label 'enhancement' et je verrais ce qu'il est possible de faire.
 
 
 ## Remerciements
