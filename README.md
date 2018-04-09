@@ -123,6 +123,11 @@ Voici la liste exhaustives des commandes supportées par Sir Mondrian
 **Syntaxe** : !resume  
 **Exemple** : !resume
 
+#### !volume
+**Description** : Ajuster le volume de Sir Mondrian entre 0 et 200%  
+**Syntaxe** : !volume [nombre]  
+**Exemple** : !volume 87
+
 #### !stop
 **Description** : Le bot arrête de jouer des musiques, impossible de reprendre où il s'est arrêté  
 **Syntaxe** : !stop  

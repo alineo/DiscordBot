@@ -74,7 +74,8 @@ module.exports = class Play extends Command {
                     })
                     .catch(function () {
                         message.reply("La vidéo n'a pas été trouvée.");
-                    })
+                    });
+
             }
 
         } else {
@@ -196,6 +197,25 @@ module.exports = class Play extends Command {
             console.log("Impossible musique suivante");
             message.channel.send("Ma queue est vidée...");
             connection.disconnect();
+        }
+    }
+
+    static volume(message, volume) {
+        if (!(!isNaN(parseFloat(volume)) && isFinite(volume))) {
+            message.channel.send("Veuillez entrez un nombre pour le volume.");
+            return;
+        } else {
+            if (volume < 0 || volume > 200) {
+                message.channel.send("Le volume doit être compris entre 0 et 200%.");
+                return;
+            }
+        }
+
+        if (this.voiceChannel) {
+            this.voiceChannel.connection.player.dispatcher.setVolume(volume/100);
+            message.channel.send("Volume reglé à " + volume + "% (0 - 200%).");
+        } else {
+            message.channel.send("Impossible de régler le volume.");
         }
     }
 

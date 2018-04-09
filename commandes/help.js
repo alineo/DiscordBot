@@ -36,6 +36,7 @@ module.exports = class Help extends Command {
             commandes += "!queueremove\n";
             commandes += "!pause\n";
             commandes += "!resume\n";
+            commandes += "!volume\n";
             commandes += "!stop\n";
             commandes += "!leave\n";
             commandes += "!pf\n";
@@ -63,6 +64,7 @@ module.exports = class Help extends Command {
             parametres += "[texte]\n";
             parametres += "[]\n";
             parametres += "[]\n";
+            parametres += "[nombre]\n";
             parametres += "[]\n";
             parametres += "[]\n";
             parametres += "[texte]\n";
@@ -90,6 +92,7 @@ module.exports = class Help extends Command {
             descriptions += "Supprimer une queue\n";
             descriptions += "Mettre la musique en pause\n";
             descriptions += "Reprendre la musique en pause\n";
+            descriptions += "Ajuster le volume de Mondrian\n";
             descriptions += "Arrêter de jouer la musique\n";
             descriptions += "Quitter le channel vocal\n";
             descriptions += "Rechercher sur pathfinder\n";
@@ -193,6 +196,12 @@ module.exports = class Help extends Command {
                 description = "**Description** : Le bot continue la musique mise en pause, si il y en a une\n" +
                     "**Syntaxe** : !resume\n" +
                     "**Exemple** : !resume";
+            }
+            else if (cmd === "volume") {
+                name = "!volume";
+                description = "**Description** : Ajuster le volume de Sir Mondrian entre 0 et 200%\n" +
+                    "**Syntaxe** : !volume [nombre]\n" +
+                    "**Exemple** : !volume 87";
             }
             else if (cmd === "stop") {
                 name = "!stop";

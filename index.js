@@ -25,6 +25,7 @@ bot.on('message', async function (message) {
     let mots = message.content.split(" ");
     mots[0] = mots[0].toLowerCase();
 
+
     if (mots[0] === '!git') {
         message.channel.send('https://github.com/alineo/Sir-Mondrian');
     }
@@ -95,16 +96,27 @@ bot.on('message', async function (message) {
     if (mots[0] === '!pause' && mots.length === 1) {
         Play.pause();
     }
-    if (mots[0] === '!resume' && mots.length === 1) {
+
+    else if (mots[0] === '!resume' && mots.length === 1) {
         Play.resume();
     }
-    if (mots[0] === '!stop' && mots.length === 1) {
+
+    else if (mots[0] === '!stop' && mots.length === 1) {
         Play.stop();
     }
-    if (mots[0] === '!leave' && mots.length === 1) {
+
+    else if (mots[0] === '!volume') {
+        if (mots.length === 2)
+            Play.volume(message, mots[1]);
+        else
+            message.channel.send("Veuillez entrez un nombre pour le volume. (exemple : !volume 87)");
+    }
+
+    else if (mots[0] === '!leave' && mots.length === 1) {
         Play.leave();
     }
-    if (mots[0] === '!clear' && mots.length >= 2) {
+
+    else if (mots[0] === '!clear' && mots.length >= 2) {
         mots.shift();
         if (Queue.clear(mots.join(' ')))
             message.channel.send("La queue " + mots.join(' ') + " est vidée.");
@@ -112,7 +124,7 @@ bot.on('message', async function (message) {
             message.channel.send("Impossible de vider la queue " + mots.join(' ') + ".");
 
     }
-    if (mots[0] === "!shuffle") {
+    else if (mots[0] === "!shuffle") {
         mots.shift();
         Queue.shuffle(message, mots.join(' '));
     }
