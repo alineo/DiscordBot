@@ -168,6 +168,11 @@ Voici la liste exhaustives des commandes supportées par Sir Mondrian
 **Syntaxe** : !git  
 **Exemple** : !git
 
+#### !edt
+**Description** : Affiche l'emploi du temps de cette semaine ou d'une semaine à venir en choississant le nombre de semaine de décalage  
+**Syntaxe** : !edt [nombre] ou !edt  
+**Exemple** : !edt 2
+
 
 ## Améliorations
 

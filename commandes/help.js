@@ -46,6 +46,7 @@ module.exports = class Help extends Command {
             commandes += "\n";
             commandes += "!delete\n";
             commandes += "!git\n";
+            commandes += "!edt\n";
 
             let parametres = "[]\n";
             parametres += "[texte]\n";
@@ -74,6 +75,8 @@ module.exports = class Help extends Command {
             parametres += "[]\n";
             parametres += "[nombre]\n";
             parametres += "[]\n";
+            parametres += "[nombre]\n";
+            parametres += "[]\n";
 
             let descriptions = "Humble présentation\n";
             descriptions += "Faire le perroquet\n";
@@ -98,10 +101,12 @@ module.exports = class Help extends Command {
             descriptions += "Rechercher sur pathfinder\n";
             descriptions += "Rechercher sur youtube\n";
             descriptions += "Lancer musique cherchée par !yt\n";
-            descriptions += "Affiche l'avatar de l'utilisateur\n";
-            descriptions += "Affiche son avatar\n";
-            descriptions += "Supprime les derniers messages\n";
-            descriptions += "Envoie le git de Sir Mondrian\n";
+            descriptions += "Afficher l'avatar de l'utilisateur\n";
+            descriptions += "Afficher son avatar\n";
+            descriptions += "Supprimer les derniers messages\n";
+            descriptions += "Envoyer le git de Sir Mondrian\n";
+            descriptions += "Afficher un edt futur\n";
+            descriptions += "Afficher l'edt actuel\n";
 
             embed.setColor(0x00AE86)
                  .addField("Commande", commandes, true)
@@ -250,6 +255,12 @@ module.exports = class Help extends Command {
                 description = "**Description** : Renvoie le lien du dépôt Git de Sir Mondrian\n" +
                     "**Syntaxe** : !git\n" +
                     "**Exemple** : !git";
+            }
+            else if (cmd === "edt") {
+                name = "!edt";
+                description = "**Description** : Afficher l'emploi du temps de cette semaine ou d'une semaine à venir en choississant le nombre de semaine de décalage\n" +
+                    "**Syntaxe** : !edt [nombre] ou !edt\n" +
+                    "**Exemple** : !edt 1";
             }
             else {
                 name = "!" + cmd;

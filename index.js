@@ -14,6 +14,7 @@ const SearchYoutube = require('./commandes/searchYoutube');
 const MemeList = require('./commandes/memelist');
 const Delete = require('./commandes/delete');
 const Avatar = require('./commandes/avatar');
+const Edt = require('./commandes/edt');
 
 bot.on('ready', function () {
     bot.user.setPresence({ game: { name: 'Jules <3 | !help', type: 'WATCHING' }, status: 'online' })/*.then(console.log)*/.catch(console.error);
@@ -79,7 +80,7 @@ bot.on('message', async function (message) {
     let CommandeUsed = Google.parse(message) || Help.parse(message) ||
                        Pathfinder.parse(message) || SearchYoutube.parse(message) ||
                        MemeList.parse(message) || Delete.parse(message) ||
-                       Queue.parse(message);
+                       Queue.parse(message) || Edt.parse(message);
 
     if (Play.match(message)) {
         Play.action(message, Queue, SearchYoutube.getListYoutube());
