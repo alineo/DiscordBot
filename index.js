@@ -15,6 +15,7 @@ const MemeList = require('./commandes/memelist');
 const Delete = require('./commandes/delete');
 const Avatar = require('./commandes/avatar');
 const Edt = require('./commandes/edt');
+const Swear = require('./commandes/swear');
 
 bot.on('ready', function () {
     bot.user.setPresence({ game: { name: 'Jules <3 | !help', type: 'WATCHING' }, status: 'online' })/*.then(console.log)*/.catch(console.error);
@@ -26,6 +27,7 @@ bot.on('message', async function (message) {
     let mots = message.content.split(" ");
     mots[0] = mots[0].toLowerCase();
 
+    Swear.parse(message);
 
     if (mots[0] === '!git') {
         message.channel.send('https://github.com/alineo/Sir-Mondrian');
