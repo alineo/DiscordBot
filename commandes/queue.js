@@ -226,6 +226,7 @@ module.exports = class Queue extends Command {
             return;
         }
 
+        let index = 0;
         let count = 0;
         let sub = "";
         for (let i = 0; i < queue.musics.length; i++) {
@@ -233,13 +234,15 @@ module.exports = class Queue extends Command {
             sub += i + " : " + queue.musics[i].title + "\n";
 
             if (count === 10) {
-                embed.addField("Musiques", sub);
+                embed.addField("Musiques " + index + "0 - " + index + "9", sub);
                 count = 0;
                 sub = "";
+                index++;
             }
         }
         if (count !== 0) {
-            embed.addField("Musiques", sub);
+            embed.addField("Musiques " + index + "0 - " + index + "" + count, sub);
+            //embed.addField("Musiques", sub);
         }
     }
 };

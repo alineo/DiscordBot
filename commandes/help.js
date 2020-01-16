@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 module.exports = class Help extends Command {
 
     static match(message) {
-        return message.content.startsWith('!help') || message.content.startsWith('!?') || message.content.startsWith('!∞?%nick&ta¶mere') || message.content.startsWith('!tasukete');
+        return message.content.startsWith('!help') || message.content.startsWith('!?') || message.content.startsWith('!tasukete');
     }
 
     static action(message) {
@@ -20,63 +20,31 @@ module.exports = class Help extends Command {
 
         if (args.length === 1) {
             let commandes = "!presentation\n";
-            commandes += "!dit\n";
-            commandes += "!google\n";
-            commandes += "!add\n";
-            commandes += "\n";
+            commandes += "!dit [texte]\n";
+            commandes += "!google [texte]\n";
+            commandes += "!add <[queue]> [playlist]\n";
+            commandes += "!add <[queue]> [musique]\n";
             commandes += "!shuffle\n";
-            commandes += "\n";
-            commandes += "!play\n";
-            commandes += "\n";
-            commandes += "\n";
+            commandes += "!shuffle [queue]\n";
+            commandes += "!play [musique]\n";
+            commandes += "!play [queue]\n";
+            commandes += "!play <[queue]> [nombre]\n";
             commandes += "!queue\n";
-            commandes += "\n";
-            commandes += "!queuelist\n";
-            commandes += "!queueadd\n";
-            commandes += "!queueremove\n";
+            commandes += "!queue [texte]\n";
+            commandes += "!queueadd [texte]\n";
+            commandes += "!queueremove [texte]\n";
             commandes += "!pause\n";
             commandes += "!resume\n";
-            commandes += "!volume\n";
+            commandes += "!volume [nombre]\n";
             commandes += "!stop\n";
             commandes += "!leave\n";
-            commandes += "!pf\n";
-            commandes += "!yt\n";
-            commandes += "!ytplay\n";
+            commandes += "!pf [texte]\n";
+            commandes += "!yt [texte]\n";
+            commandes += "!ytplay [chiffre]\n";
             commandes += "!avatar\n";
-            commandes += "\n";
-            commandes += "!delete\n";
+            commandes += "!avatar [utilisateur]\n";
+            commandes += "!delete [nombre]\n";
             commandes += "!git\n";
-            commandes += "!edt\n";
-
-            let parametres = "[]\n";
-            parametres += "[texte]\n";
-            parametres += "[texte]\n";
-            parametres += "<[queue]> [playlist]\n";
-            parametres += "<[queue]> [musique]\n";
-            parametres += "[queue]\n";
-            parametres += "[]\n";
-            parametres += "[musique]\n";
-            parametres += "<[queue]> [nombre]\n";
-            parametres += "<[queue]> []\n";
-            parametres += "[texte]\n";
-            parametres += "[]\n";
-            parametres += "[]\n";
-            parametres += "[texte]\n";
-            parametres += "[texte]\n";
-            parametres += "[]\n";
-            parametres += "[]\n";
-            parametres += "[nombre]\n";
-            parametres += "[]\n";
-            parametres += "[]\n";
-            parametres += "[texte]\n";
-            parametres += "[texte]\n";
-            parametres += "[chiffre]\n";
-            parametres += "[utilisateur]\n";
-            parametres += "[]\n";
-            parametres += "[nombre]\n";
-            parametres += "[]\n";
-            parametres += "[nombre]\n";
-            parametres += "[]\n";
 
             let descriptions = "Humble présentation\n";
             descriptions += "Faire le perroquet\n";
@@ -84,13 +52,12 @@ module.exports = class Help extends Command {
             descriptions += "Ajouter la playlist à la queue\n";
             descriptions += "Ajouter la musique à la queue\n";
             descriptions += "Mélanger les musiques\n";
-            descriptions += "Mélanger les musiques \n";
+            descriptions += "Mélanger les musiques d'une queue\n";
             descriptions += "Jouer la musique\n";
             descriptions += "Jouer les musique de la queue\n";
-            descriptions += "Jouer la musique 0 de la queue\n";
+            descriptions += "Jouer la musique choisie de la queue\n";
+            descriptions += "Voir la liste des queues\n";
             descriptions += "Voir les musiques de la queue\n";
-            descriptions += "Voir la liste des queues\n";
-            descriptions += "Voir la liste des queues\n";
             descriptions += "Créer une queue\n";
             descriptions += "Supprimer une queue\n";
             descriptions += "Mettre la musique en pause\n";
@@ -100,20 +67,17 @@ module.exports = class Help extends Command {
             descriptions += "Quitter le channel vocal\n";
             descriptions += "Rechercher sur pathfinder\n";
             descriptions += "Rechercher sur youtube\n";
-            descriptions += "Lancer musique cherchée par !yt\n";
-            descriptions += "Afficher l'avatar de l'utilisateur\n";
+            descriptions += "Lancer la musique cherchée par !yt\n";
             descriptions += "Afficher son avatar\n";
+            descriptions += "Afficher l'avatar de l'utilisateur\n";
             descriptions += "Supprimer les derniers messages\n";
             descriptions += "Envoyer le git de Sir Mondrian\n";
-            descriptions += "Afficher un edt futur\n";
-            descriptions += "Afficher l'edt actuel\n";
 
             embed.setColor(0x00AE86)
-                 .addField("Commande", commandes, true)
-                 .addField("Paramètre", parametres, true)
-                 .addField("Description", descriptions, true)
-                 .addBlankField()
-                 .addField("Aide complémentaire", "Pour plus de précisions sur une commande, tapez '!help [commandes]' plusieurs commandes peuvent être mises en même temps, séparées par un espace.", false);
+                .addField("Commande", commandes, true)
+                .addField("Description", descriptions, true)
+                .addBlankField()
+                .addField("Aide complémentaire", "Pour plus de précisions sur une commande, tapez '!help [commandes]' plusieurs commandes peuvent être mises en même temps, séparées par un espace.", false);
         } else {
             args.shift();
             this.searchHelpForArgs(args, embed);
@@ -150,33 +114,27 @@ module.exports = class Help extends Command {
             else if (cmd === "add") {
                 name = "!add";
                 description = "**Description** : Le bot ajoute la musique ou la playlist que vous lui passez à la queue précisée ou 'origine' par défaut\n" +
-                    "**Syntaxe** : !add [queue] [playlist] ou !add [playlist] ou !add [queue] [musique] ou !add [musique]\n" +
+                    "**Syntaxe** : \n\t!add [musique] \n\t!add [playlist] \n\t!add [queue] [musique] \n\t!add [queue] [playlist]\n" +
                     "**Exemple** : !add Musique RPG https://www.youtube.com/watch?v=dQw4w9WgXcQ";
             }
             else if (cmd === "shuffle") {
                 name = "!shuffle";
                 description = "**Description** : Le bot mélange les musiques de la queue précisée ou de la première queue par défaut\n" +
-                    "**Syntaxe** : !shuffle [queue] ou !shuffle\n" +
+                    "**Syntaxe** : \n\t!shuffle [queue] \n\t!shuffle\n" +
                     "**Exemples** : !shuffle Musique RPG";
             }
             else if (cmd === "play") {
                 name = "!play";
                 description = "**Description** : Le bot joue soit la musique passée, soit la musique correspondant à l'index ou 0 par défaut dans la queue précisée ou la première par défaut\n" +
-                    "**Syntaxe** : !play [musique] ou !play [nombre] ou !play [queue] [nombre] ou !play [queue] ou !play\n" +
+                    "**Syntaxe** : \n\t!play [musique] \n\t!play [nombre] \n\t!play [queue] [nombre] \n\t!play [queue] \n\t!play\n" +
                     "**Exemples** : !play https://www.youtube.com/watch?v=dQw4w9WgXcQ\n" +
                     "                     !play Musiques RPG 5";
             }
             else if (cmd === "queue") {
                 name = "!queue";
                 description = "**Description** : Affiche la liste des queues ou affiche les musiques d'une queue si un nom est précisé\n" +
-                    "**Syntaxe** : !queue [texte] ou !queue\n" +
+                    "**Syntaxe** : \n\t!queue [texte] \n\t!queue\n" +
                     "**Exemple** : !queue nom de la queue";
-            }
-            else if (cmd === "queuelist") {
-                name = "!queuelist";
-                description = "**Description** : Affiche la liste des queues\n" +
-                    "**Syntaxe** : !queuelist\n" +
-                    "**Exemple** : !queuelist";
             }
             else if (cmd === "queueadd") {
                 name = "!queueadd";
@@ -192,7 +150,7 @@ module.exports = class Help extends Command {
             }
             else if (cmd === "pause") {
                 name = "!pause";
-                description = "**Description** : Le bot met la musique qu'il est en train de jouer, si il y en a une, en pause\n" +
+                description = "**Description** : Le bot met en pause la musique qu'il est en train de jouer, si il y en a une\n" +
                     "**Syntaxe** : !pause\n" +
                     "**Exemple** : !pause";
             }
@@ -241,7 +199,7 @@ module.exports = class Help extends Command {
             else if (cmd === "avatar") {
                 name = "!avatar";
                 description = "**Description** : Affiche son propre avatar ou celui de la personne désignée\n" +
-                    "**Syntaxe** : !avatar [utilisateur] ou !avatar\n" +
+                    "**Syntaxe** : \n\t!avatar [utilisateur] \n\t!avatar\n" +
                     "**Exemple** : !avatar @Sir Mondrian#0896";
             }
             else if (cmd === "delete") {
@@ -256,19 +214,12 @@ module.exports = class Help extends Command {
                     "**Syntaxe** : !git\n" +
                     "**Exemple** : !git";
             }
-            else if (cmd === "edt") {
-                name = "!edt";
-                description = "**Description** : Afficher l'emploi du temps de cette semaine ou d'une semaine à venir en choississant le nombre de semaine de décalage\n" +
-                    "**Syntaxe** : !edt [nombre] ou !edt\n" +
-                    "**Exemple** : !edt 1";
-            }
             else {
                 name = "!" + cmd;
                 description = "**Aucune commande correspondante à " + cmd + " n'a pu être trouvée**";
             }
 
             embed.addField(name, description, false);
-            if (i !== args.length - 1) embed.addBlankField();
         }
     }
 };

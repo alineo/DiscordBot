@@ -18,6 +18,8 @@ Avant de pouvoir utiliser le bot, il est nécessaire d'effectuer les étapes sui
 
 ### Prérequis
 
+L'installation de ffmpeg sur le PC est nécessaire, vous pouvez trouvez un [tutoriel ici](https://www.youtube.com/watch?v=SW-iKrT_nJs).
+
 Les modules suivants doivent être installés :
 ```nodejs
 npm install discord.js

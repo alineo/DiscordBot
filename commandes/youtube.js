@@ -1,7 +1,7 @@
 module.exports = function() {
 
     const https = require('https');
-    const YOUR_API_KEY = 'AIzaSyCcTEJGefo5XpuJBNacIsqLMSHAQcMw8c8';
+    const YOUR_API_KEY = 'AIzaSyA8bWPhy1KdBQIFyDFMEpImHa4t3p7brA8';
 
     /**
      * Builds a query string for making youtube API call

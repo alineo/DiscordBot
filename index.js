@@ -14,7 +14,6 @@ const SearchYoutube = require('./commandes/searchYoutube');
 const MemeList = require('./commandes/memelist');
 const Delete = require('./commandes/delete');
 const Avatar = require('./commandes/avatar');
-const Edt = require('./commandes/edt');
 const Swear = require('./commandes/swear');
 
 bot.on('ready', function () {
@@ -28,6 +27,21 @@ bot.on('message', async function (message) {
     mots[0] = mots[0].toLowerCase();
 
     Swear.parse(message);
+
+
+    if (message.content === '!join') {
+        // Only try to join the sender's voice channel if they are in one themselves
+        if (message.member.voiceChannel) {
+            message.member.voiceChannel.join()
+                .then(connection => { // Connection is an instance of VoiceConnection
+                    message.reply('I have successfully connected to the channel!');
+                })
+                .catch(console.log);
+        } else {
+            message.reply('You need to join a voice channel first!');
+        }
+    }
+
 
     if (mots[0] === '!git') {
         message.channel.send('https://github.com/alineo/Sir-Mondrian');
@@ -82,7 +96,7 @@ bot.on('message', async function (message) {
     let CommandeUsed = Google.parse(message) || Help.parse(message) ||
                        Pathfinder.parse(message) || SearchYoutube.parse(message) ||
                        MemeList.parse(message) || Delete.parse(message) ||
-                       Queue.parse(message) || Edt.parse(message);
+                       Queue.parse(message);
 
     if (Play.match(message)) {
         Play.action(message, Queue, SearchYoutube.getListYoutube());
@@ -112,7 +126,7 @@ bot.on('message', async function (message) {
         if (mots.length === 2)
             Play.volume(message, mots[1]);
         else
-            message.channel.send("Veuillez entrez un nombre pour le volume. (exemple : !volume 87)");
+            message.channel.send("Veuillez entrer un nombre pour le volume. (exemple : !volume 87)");
     }
 
     else if (mots[0] === '!leave' && mots.length === 1) {

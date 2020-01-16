@@ -62,6 +62,7 @@ module.exports = class Play extends Command {
                 this.voiceChannel.join()
                     .then(function (connection) {
                         let stream = YoutubeStream(args[1]);
+                        console.log(stream);
                         stream.on('error', function () {
                             message.reply("Je n'ai pas réussi à lire la vidéo :/");
                             connection.disconnect();
@@ -80,7 +81,7 @@ module.exports = class Play extends Command {
 
         } else {
             if (queueYT === undefined) {
-                message.reply("il faut d'abord faire une requête youtube.");
+                message.reply("Il faut d'abord faire une requête youtube.");
                 return;
             }
 
@@ -90,7 +91,7 @@ module.exports = class Play extends Command {
             }
 
             if (args[1] > 4 || args[1] < 0) {
-                message.reply(args[1] + " n'est pas un ciffre valide, choisis entre la vidéo 0 et la vidéo 4");
+                message.reply(args[1] + " n'est pas un chiffre valide, choisis entre la vidéo 0 et la vidéo 4");
                 return;
             }
 
@@ -140,7 +141,7 @@ module.exports = class Play extends Command {
 
         // the index does not exist
         if (startIndex >list.length) {
-            message.reply("ma queue n'est pas aussi grosse, désolé :worried: ");
+            message.reply("Ma queue n'est pas aussi grosse, désolé :worried: ");
             return;
         }
         if (startIndex < 0) {
@@ -163,7 +164,7 @@ module.exports = class Play extends Command {
     }
 
     static startMusic() {
-        console.log("Debut de musique");
+        console.log("Début de musique");
         this.isPlaying = true;
     }
 
@@ -202,7 +203,7 @@ module.exports = class Play extends Command {
 
     static volume(message, volume) {
         if (!(!isNaN(parseFloat(volume)) && isFinite(volume))) {
-            message.channel.send("Veuillez entrez un nombre pour le volume.");
+            message.channel.send("Veuillez entrer un nombre pour le volume.");
             return;
         } else {
             if (volume < 0 || volume > 200) {
