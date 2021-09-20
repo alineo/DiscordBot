@@ -1,55 +1,41 @@
-const KEY_BOT = require('./variables').KEY_BOT;
+﻿const { CommandoClient } = require('discord.js-commando');
+const path = require('path');
 
-const Discord = require('discord.js');
-const bot = new Discord.Client();
-const fs = require('fs');
+var swears = require('./swears');
+var config = require('./config');
 
-const Google = require('./commandes/google');
-const Play = require('./commandes/play');
-const Queue = require('./commandes/queue');
-const Help = require('./commandes/help');
-const Add = require('./commandes/add');
-const Pathfinder = require('./commandes/pathfinder');
-const SearchYoutube = require('./commandes/searchYoutube');
-const MemeList = require('./commandes/memelist');
-const Delete = require('./commandes/delete');
-const Avatar = require('./commandes/avatar');
-const Swear = require('./commandes/swear');
-
-bot.on('ready', function () {
-    bot.user.setPresence({ game: { name: 'Jules <3 | !help', type: 'WATCHING' }, status: 'online' })/*.then(console.log)*/.catch(console.error);
-    console.log("Sir Mondrian prêt");
+const client = new CommandoClient({
+    commandPrefix: '!',
+    owner: '282267568201400320'
 });
 
+client.registry
+    .registerDefaultTypes()
+    .registerDefaultGroups()
+    .registerDefaultCommands({
+        help: false
+    })
+    .registerGroup('musics', 'Musique')
+    .registerGroup('util', 'Utilitaire')
+    .registerGroup('games', 'Jeux')
+    .registerCommandsIn(path.join(__dirname, 'commands'));
 
-bot.on('message', async function (message) {
-    let mots = message.content.split(" ");
+client.once('ready', () => {
+    console.log(`Connecté en tant que ${client.user.tag} - (${client.user.id})`);
+    client.user.setActivity(`Jules <3 | !help`, { type: "WATCHING" });
+});
+
+client.on('error', (_error) => console.error(_error));
+
+client.login(config.DiscordAPIKey);
+
+// Contrôle des messages envoyés sans commande : insulte, réponse automatique, etc
+client.on('message', async function (message) {
+    let mots = message.content.trim().split(" ");
     mots[0] = mots[0].toLowerCase();
 
-    Swear.parse(message);
+    swears.controleMessage(message);
 
-
-    if (message.content === '!join') {
-        // Only try to join the sender's voice channel if they are in one themselves
-        if (message.member.voiceChannel) {
-            message.member.voiceChannel.join()
-                .then(connection => { // Connection is an instance of VoiceConnection
-                    message.reply('I have successfully connected to the channel!');
-                })
-                .catch(console.log);
-        } else {
-            message.reply('You need to join a voice channel first!');
-        }
-    }
-
-
-    if (mots[0] === '!git') {
-        message.channel.send('https://github.com/alineo/Sir-Mondrian');
-    }
-    if (mots[0] === '!suce') {
-        //message.reply('ma bite'); envoie un message à l'utilisateur concerné
-        message.channel.send('ma bite');
-    }
     if ((mots[0] === 'ah' || mots[0] === 'ha') && mots.length === 1) {
         message.channel.send('bé');
     }
@@ -59,92 +45,4 @@ bot.on('message', async function (message) {
     if (mots[0] === 'quoi' && mots.length === 1) {
         message.channel.send('ffeur');
     }
-
-    if (mots[0] === '!dit') {
-        if (mots.length > 1) {
-            message.delete();
-            if (mots.length === 2 && (!isNaN(parseFloat(mots[1])) && isFinite(mots[1]))) {
-                console.log(mots[1]);
-                if (mots[1] === "23")
-                    message.channel.send("Est-ce que je vous ai déjà raconté la fois où j'ai eu un coup de soleil ?", {tts: true});
-                else {
-                    mots.shift();
-                    message.channel.send(mots.join(' '), {tts: true});
-                }
-            } else {
-                mots.shift();
-                message.channel.send(mots.join(' '), {tts: true});
-            }
-        }
-    }
-
-    if (mots[0] === '!oklol') {
-        if (mots.length > 1) {
-            mots.shift();
-            message.delete();
-            message.channel.send(mots.join(' '), {tts: true});
-            const fetchedMessages = await message.channel.fetchMessages({limit: 1});
-            message.channel.bulkDelete(fetchedMessages)
-                .catch(console.error);
-        }
-    }
-
-    if (mots[0] === '!presentation') {
-        message.channel.send("Bonjour, je suis Sir Mondrian, l'esclave de votre seigneur et maître Jules. Je serais votre humble serviteur afin de remplir le moindre de vos désirs.", {tts: true});
-    }
-
-    let CommandeUsed = Google.parse(message) || Help.parse(message) ||
-                       Pathfinder.parse(message) || SearchYoutube.parse(message) ||
-                       MemeList.parse(message) || Delete.parse(message) ||
-                       Queue.parse(message);
-
-    if (Play.match(message)) {
-        Play.action(message, Queue, SearchYoutube.getListYoutube());
-    }
-    else if (Add.match(message)) {
-        let musics = await Add.action(message).catch(console.error);
-        Queue.add(message, musics);
-    }
-    else if (Avatar.match(message)) {
-        Avatar.action(message, bot);
-    }
-
-
-    if (mots[0] === '!pause' && mots.length === 1) {
-        Play.pause();
-    }
-
-    else if (mots[0] === '!resume' && mots.length === 1) {
-        Play.resume();
-    }
-
-    else if (mots[0] === '!stop' && mots.length === 1) {
-        Play.stop();
-    }
-
-    else if (mots[0] === '!volume') {
-        if (mots.length === 2)
-            Play.volume(message, mots[1]);
-        else
-            message.channel.send("Veuillez entrer un nombre pour le volume. (exemple : !volume 87)");
-    }
-
-    else if (mots[0] === '!leave' && mots.length === 1) {
-        Play.leave();
-    }
-
-    else if (mots[0] === '!clear' && mots.length >= 2) {
-        mots.shift();
-        if (Queue.clear(mots.join(' ')))
-            message.channel.send("La queue " + mots.join(' ') + " est vidée.");
-        else
-            message.channel.send("Impossible de vider la queue " + mots.join(' ') + ".");
-
-    }
-    else if (mots[0] === "!shuffle") {
-        mots.shift();
-        Queue.shuffle(message, mots.join(' '));
-    }
 });
-
-bot.login(KEY_BOT);

@@ -1,7 +1,8 @@
-module.exports = function() {
+var config = require('./config');
+
+module.exports = function () {
 
     const https = require('https');
-    const YOUR_API_KEY = 'AIzaSyA8bWPhy1KdBQIFyDFMEpImHa4t3p7brA8';
 
     /**
      * Builds a query string for making youtube API call
@@ -32,22 +33,22 @@ module.exports = function() {
     function getRequest(apiUrl) {
         let parsed;
         return new Promise((resolve, reject) => {
-            https.get(apiUrl, function(res) {
+            https.get(apiUrl, function (res) {
                 let body = ''; // Will contain the final response
                 // Received data is a buffer.
                 // Adding it to our body
-                res.on('data', function(data) {
+                res.on('data', function (data) {
                     body += data;
 
                 });
                 // After the response is completed, parse it and log it to the console
-                res.on('end', function() {
+                res.on('end', function () {
                     parsed = JSON.parse(body);
                     resolve(parsed);
                 });
             })
-            // If any error has occured, log error to console
-                .on('error', function(e) {
+                // If any error has occured, log error to console
+                .on('error', function (e) {
                     reject(e.message);
                     console.log('Got error: ' + e.message);
                 });
@@ -71,10 +72,9 @@ module.exports = function() {
         let params = {
             'playlistId': id,
             'maxResults': 50,
-            'pageToken': (pageToken == null) ? '' : pageToken,
+            'pageToken': (!pageToken) ? '' : pageToken,
             'part': 'snippet,contentDetails',
-            'key': YOUR_API_KEY,
-
+            'key': config.YoutubeAPIKey
         };
 
         let queryString = buildQueryString(apiUrl, params);
@@ -123,10 +123,9 @@ module.exports = function() {
         let apiUrl = 'https://www.googleapis.com/youtube/v3/videos';
         let params = {
             'id': id,
-            'pageToken': (pageToken == null) ? '' : pageToken,
+            'pageToken': (!pageToken) ? '' : pageToken,
             'part': 'snippet,contentDetails',
-            'key': YOUR_API_KEY,
-
+            'key': config.YoutubeAPIKey
         };
 
         let queryString = buildQueryString(apiUrl, params);
@@ -179,8 +178,7 @@ module.exports = function() {
             'q': id,
             'part': 'snippet',
             'type': 'video',
-            'key': YOUR_API_KEY,
-
+            'key': config.YoutubeAPIKey
         };
 
         let queryString = buildQueryString(apiUrl, params);
@@ -203,7 +201,7 @@ module.exports = function() {
                     result = res;
                     resolve(result);
                 }
-                //till all videos are retrived
+                //till all videos are retrieved
                 if (res.hasOwnProperty('nextPageToken')) {
                     parsePlaylist(id, res.nextPageToken);
                 }
@@ -218,6 +216,6 @@ module.exports = function() {
     return {
         parsePlaylist: parsePlaylist,
         parseVideo: parseVideo,
-        searchVideo: searchVideo,
+        searchVideo: searchVideo
     }
 };

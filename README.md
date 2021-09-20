@@ -10,7 +10,8 @@
 
 # Sir Mondrian
 
-Projet de bot discord réalisé en Node.js permettant une myriade de commandes différentes pour les utilisateurs pour youtube ou pathfinder entre autre.
+Bienvenue pour la version 2.0, toute fraîche, du merveilleux Sir Mondrian !
+Projet de bot discord réalisé en Node.js permettant une myriade de commandes différentes pour les utilisateurs pour youtube, pathfinder et plus encore !
 
 ## Avant de commencer
 
@@ -22,10 +23,10 @@ L'installation de ffmpeg sur le PC est nécessaire, vous pouvez trouvez un [tuto
 
 Les modules suivants doivent être installés :
 ```nodejs
-npm install discord.js
-npm install ytdl-core
-npm install ffmpeg-binaries
-npm install node-opus
+npm i discord.js
+npm i discordjs/Commando
+npm i ytdl-core-discord
+npm i discordjs/opus
 ```
 
 ## Commandes
@@ -39,24 +40,20 @@ Voici la liste exhaustives des commandes supportées par Sir Mondrian
 | !presentation | []                   | Humble présentation               |
 | !dit          | [texte]              | Faire le perroquet                |
 | !google       | [texte]              | Rechercher ce que vous voulez     |
-| !add          | <[queue]> [playlist] | Ajouter la playlist à la queue    |
-|               | <[queue]> [musique]  | Ajouter la musique à la queue     |
-| !shuffle      | [queue]              | Mélange les musiques de la queue  |
-|               | []                   | Mélange les musiques de la queue 0|
+| !add          | <[playlist]> [lien]  | Ajouter la playlist ou vidéo      |
+|               |                      | à la playlist cible ou défaut     |
 | !play         | [musique]            | Jouer la musique                  |
-|               | <[queue]> [nombre]   | Jouer les musique de la queue     |
-|               | <[queue]> []         | Jouer la musique 0 de la queue    |
-| !queue        | [texte]              | Voir les musiques de la queue     |
-|               | []                   | Voir la liste des queues          |
-| !queuelist    | []                   | Voir la liste des queues          |
-| !queueadd     | [texte]              | Créer une queue                   |
+|               | <[playlist]> [index] | Jouer les musique de la playlist  |
+|               | <[playlist]> []      | Jouer la musique 0 de la playlist |
+|               | [index]              | Jouer une musique Youtube cherchée|
+| !playlist     | [nom]                | Voir les musiques de la playlist  |
+|               | []                   | Voir la liste des playlists       |
 | !pause        | []                   | Mettre la musique en pause        |
 | !resume       | []                   | Reprendre la musique en pause     |
 | !stop         | []                   | Arrêter de jouer la musique       |
-| !leave        | []                   | Quitter le channel vocal          |
+| !volume       | [nombre]             | Change le volume des musiques     |
 | !pf           | [texte]              | Rechercher sur pathfinder         |
 | !yt           | [texte]              | Rechercher sur youtube            |
-| !ytplay       | [chiffre]            | Lancer musique cherchée par !yt   |
 | !avatar       | [utilisateur]        | Affiche l'avatar de l'utilisateur |
 |               | []                   | Affiche son avatar                |
 | !delete       | [nombre]             | Supprime les derniers messages    |
@@ -79,41 +76,22 @@ Voici la liste exhaustives des commandes supportées par Sir Mondrian
 **Exemple** : !google comment tuer quelqu'un sans laisser de traces
 
 #### !add
-**Description** : Le bot ajoute la musique ou la playlist que vous lui passez à la queue précisée ou 'origine' par défaut  
-**Syntaxe** : !add [queue] [playlist] ou !add [playlist] ou !add [queue] [musique] ou !add [musique]  
+**Description** : Le bot ajoute la musique ou la playlist que vous lui passez à la playlist précisée ou 'origine' par défaut  
+**Syntaxe** : !add [playlist] [lien] ou !add [lien] ou !add [musique]  
 **Exemple** : !add Musique RPG https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
-#### !shuffle
-**Description** : Le bot mélange les musiques de la queue précisée ou de la première queue par défaut  
-**Syntaxe** : !shuffle [queue] ou !shuffle
-**Exemple** : !shuffle Musique RPG
-
 #### !play
-**Description** : Le bot joue soit la musique passée, soit la musique correspondant à l'index ou 0 par défaut dans la queue précisée ou la première par défaut  
-**Syntaxe** : !play [musique] ou !play [nombre] ou !play [queue] [nombre] ou !play [queue] ou !play  
+**Description** : Le bot joue soit la musique passée, soit la musique correspondant à l'index ou 0 par défaut dans la playlist précisée ou la première par défaut  
+**Syntaxe** : !play [musique] ou !play [nombre] ou !play [playlist] [index] ou !play [playlist] ou ou !play [index] !play  
 **Exemples** :  
 !play https://www.youtube.com/watch?v=dQw4w9WgXcQ  
 !play Musiques RPG 5
+!play 3
 
-#### !queue
-**Description** : Affiche la liste des queues ou affiche les musiques d'une queue si un nom est précisé  
-**Syntaxe** : !queue [texte] ou !queue  
-**Exemple** : !queue nom de la queue
-
-#### !queuelist
-**Description** : Affiche la liste des queues  
-**Syntaxe** : !queuelist  
-**Exemple** : !queuelist
-
-#### !queueadd
-**Description** : Créer une nouvelle queue avec le nom qui suit la commande  
-**Syntaxe** : !queueadd [texte]  
-**Exemple** : !queueadd Musiques RPG
-
-#### !queueremove
-**Description** : Supprimer la queue dont le nom correspond au texte qui suit la commande  
-**Syntaxe** : !queueremove [texte]  
-**Exemple** : !queueremove Musiques RPG
+#### !playlist
+**Description** : Affiche la liste des playlists ou affiche les musiques d'une playlist si un nom est précisé  
+**Syntaxe** : !playlist [texte] ou !playlist  
+**Exemple** : !playlist nom de la playlist
 
 #### !pause
 **Description** : Le bot met la musique qu'il est en train de jouer, si il y en a une, en pause  
@@ -125,20 +103,15 @@ Voici la liste exhaustives des commandes supportées par Sir Mondrian
 **Syntaxe** : !resume  
 **Exemple** : !resume
 
-#### !volume
-**Description** : Ajuster le volume de Sir Mondrian entre 0 et 200%  
-**Syntaxe** : !volume [nombre]  
-**Exemple** : !volume 87
-
 #### !stop
 **Description** : Le bot arrête de jouer des musiques, impossible de reprendre où il s'est arrêté  
 **Syntaxe** : !stop  
 **Exemple** : !stop
 
-#### !leave
-**Description** : Le bot quitte le channel vocal, stop la musique en cours si il y en a une  
-**Syntaxe** : !leave  
-**Exemple** : !leave
+#### !volume
+**Description** : Ajuster le volume de Sir Mondrian entre 0 et 200%  
+**Syntaxe** : !volume [nombre]  
+**Exemple** : !volume 87
 
 #### !pf
 **Description** : Le bot effectue une recherche sur le site pathfinder  
@@ -149,11 +122,6 @@ Voici la liste exhaustives des commandes supportées par Sir Mondrian
 **Description** : Le bot effectue une recherche youtube et retourne les 5 meilleurs résultats  
 **Syntaxe** : !yt [texte]  
 **Exemple** : !yt joueur du grenier
-
-#### !ytplay
-**Description** : Le bot lance la musique correspondant à une recherche '!yt' précédemment effectuée  
-**Syntaxe** : !ytplay [chiffre]  
-**Exemple** : !ytplay 2
 
 #### !avatar
 **Description** : Affiche son propre avatar ou celui de la personne désignée  
@@ -169,11 +137,6 @@ Voici la liste exhaustives des commandes supportées par Sir Mondrian
 **Description** : Renvoie le lien du dépôt Git de Sir Mondrian  
 **Syntaxe** : !git  
 **Exemple** : !git
-
-#### !edt
-**Description** : Affiche l'emploi du temps de cette semaine ou d'une semaine à venir en choississant le nombre de semaine de décalage  
-**Syntaxe** : !edt [nombre] ou !edt  
-**Exemple** : !edt 2
 
 
 ## Améliorations
